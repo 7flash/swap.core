@@ -96,6 +96,14 @@ class Flow {
     SwapApp.env.storage.setItem(`flow.${this.swap.id}`, this.state)
   }
 
+  enterStep(index) {
+    return new Promise((resolve) => {
+      this.on('enter step', (step) => {
+        if (step === index) resolve()
+      })
+    })
+  }
+
   finishStep(data) {
     this.goNextStep(data)
   }
@@ -111,7 +119,8 @@ class Flow {
       ...(data || {}),
     }, true)
 
-    this.goStep(newStep)
+    if (this.steps.length > newStep)
+      this.goStep(newStep)
   }
 
   goStep(index) {
